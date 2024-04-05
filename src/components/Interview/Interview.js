@@ -37,7 +37,7 @@ const Interview = () => {
               ONline
             </div>
           </div>
-          <button className="w-12 bg-red-500 h-8 text-white" onClick={}>Start</button>
+          <button className="w-12 bg-red-500 h-8 text-white" >Start</button>
         </div>
       </div>
     </>
