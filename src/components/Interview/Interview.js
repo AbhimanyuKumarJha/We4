@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom";
+
 const Interview = () => {
-    
   return (
     <>
       <div className="w-full h-full bg-slate-900 py-28 m-0">
@@ -37,7 +38,9 @@ const Interview = () => {
               ONline
             </div>
           </div>
-          <button className="w-12 bg-red-500 h-8 text-white" >Start</button>
+          <div className="w-12 bg-red-500 h-8 text-white">
+            <Link to="Details/SDE/Technical/Interviewer/Rohan"> Start</Link>
+          </div>
         </div>
       </div>
     </>

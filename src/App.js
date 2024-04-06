@@ -6,6 +6,7 @@ import Interview from "./components/Interview/Interview";
 import Resume from "./components/Resume/Resume";
 import Dashboard from "./components/Dashboard/Dashboard";
 import CompleteReview from "./components/Interview/CompleteInterview";
+import InterviewMEET from "./components/Interview/meet";
 
 function App() {
   return (
@@ -16,6 +17,11 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/Resume" element={<Resume />} />
           <Route exact path="/Interview" element={<Interview />} />
+          <Route
+            extact
+            path="/Interview/Details/:postID/:typeID/Interviewer/:InterviewID"
+            element={<InterviewMEET />}
+          />
           <Route
             exact
             path="/Complete-Interview"
