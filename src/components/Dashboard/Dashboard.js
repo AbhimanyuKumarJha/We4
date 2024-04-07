@@ -27,7 +27,7 @@ const Dashboard = (props) => {
   return (
     <>
       <div
-        className="fixed w-full h-full text-white p-0 top-24 backdrop-blur"
+        className="fixed w-full h-full bg-[rgba(23, 23, 23, 0.44)] text-white p-0 top-24 backdrop-blur"
         id="login-Box"
       >
         <div className="w-full h-full flex items-center justify-center">
