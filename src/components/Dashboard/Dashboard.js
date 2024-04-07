@@ -22,14 +22,14 @@ const Dashboard = (props) => {
   };
   const LoginBoxElement = document.getElementById("login-Box");
   if (LoginBoxElement)
-    LoginBoxElement.style.display = props.visibity ? "block" : "none";
+    LoginBoxElement.style.display = props.visibity === true ? "block" : "none";
   // LoginBoxElement.style.display = "none";
   console.log(props.visibity);
 
   return (
     <>
       <div
-        className="fixed w-full h-full bg-[rgba(23, 23, 23, 0.44)] text-white p-0 top-24 backdrop-blur"
+        className="fixed w-full h-full bg-[rgba(23, 23, 23, 0.44)] text-white p-0 top-24 backdrop-blur hidden"
         id="login-Box"
       >
         <div className="w-full h-full flex items-center justify-center">
@@ -57,3 +57,7 @@ const Dashboard = (props) => {
   );
 };
 export default Dashboard;
+
+Dashboard.defaultProps = {
+  visibity: false,
+};

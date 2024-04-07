@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-const InterviewMEET = () => {
+const InterviewMEET = (props) => {
   const { postID, typeID, InterviewID } = useParams();
-  const QuestionTimer = <></>;
+
+  const start = Date.now();
+
+  const calculateTimeLeft = () => {
+    let difference = Date.now() - start;
+    return props.QuestionTimer - difference / 1000;
+  };
+  const [sec, setSec] = useState();
 
   //todo Remove the header from the meet
   const RemoveHeader = document.getElementById("layout-header");
@@ -17,7 +24,8 @@ const InterviewMEET = () => {
 
   const toggleExitOption = () => {
     setExitOption(!exitOption);
-    if (Confirmation) Confirmation.style.display = exitOption ? "flex" : "none";
+    if (Confirmation)
+      Confirmation.style.display = exitOption === true ? "flex" : "none";
   };
 
   const backToHome = () => {
@@ -46,7 +54,7 @@ const InterviewMEET = () => {
             {/* time and command component */}
             <div className="w-60 h-40 bg-slate-600 rounded-2xl">
               <div className="w-full h-[70%] bg-red-400 rounded-t-2xl  ">
-                {QuestionTimer}
+                {props.QuestionTimer}
               </div>
               <div className="flex w-full h-[30%] justify-around rounded-b-2xl">
                 <button className="h-full w-[49%] bg-slate-400 rounded-bl-2xl ">
@@ -69,7 +77,7 @@ const InterviewMEET = () => {
 
       <div
         id="exits-options"
-        className="w-full h-full backdrop-blur-lg absolute top-0 bg-[rgba(23, 23, 23, 0.44)] flex items-center justify-center"
+        className="w-full h-full backdrop-blur-lg absolute top-0 bg-[rgba(23, 23, 23, 0.44)] items-center justify-center hidden"
       >
         <button
           onClick={toggleExitOption}
@@ -78,11 +86,11 @@ const InterviewMEET = () => {
           <img src="" alt="Exit" />
         </button>
         {/* //todo exit confirmation */}
-        <div className="w-[300px] h-28 flex flex-col items-center ">
-          <div className="w-[299px] h-[70%] bg-red-400 rounded-t-2xl p-2 text-center ">
+        <div className="w-[300px] h-28 flex flex-col items-center justify-around">
+          <div className="w-[299px] h-[77px] bg-slate-400 rounded-t-2xl p-2 text-center ">
             Do you want to quit the interview
           </div>
-          <div className="flex w-full h-[30%] justify-around rounded-b-2xl">
+          <div className="flex w-full h-[33px] justify-around rounded-b-2xl">
             <button
               className="h-full w-[149px] bg-slate-400 rounded-bl-2xl "
               onClick={toggleExitOption}
@@ -102,3 +110,7 @@ const InterviewMEET = () => {
   );
 };
 export default InterviewMEET;
+
+InterviewMEET.defaultProps = {
+  QuestionTimer: 100,
+};
