@@ -23,6 +23,8 @@ const Dashboard = (props) => {
   const LoginBoxElement = document.getElementById("login-Box");
   if (LoginBoxElement)
     LoginBoxElement.style.display = props.visibity ? "block" : "none";
+  // LoginBoxElement.style.display = "none";
+  console.log(props.visibity);
 
   return (
     <>

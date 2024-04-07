@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const InterviewMEET = () => {
   const { postID, typeID, InterviewID } = useParams();
   const QuestionTimer = <></>;
@@ -17,9 +17,13 @@ const InterviewMEET = () => {
 
   const toggleExitOption = () => {
     setExitOption(!exitOption);
-    Confirmation.style.display = exitOption ? "block" : "none";
+    if (Confirmation) Confirmation.style.display = exitOption ? "flex" : "none";
   };
 
+  const backToHome = () => {
+    RemoveHeader.style.display = "flex";
+    console.log("Back to Home");
+  };
   return (
     <>
       <div className="w-full h-screen bg-slate-950 m-0 p-0 z-9 flex items-center">
@@ -45,22 +49,27 @@ const InterviewMEET = () => {
                 {QuestionTimer}
               </div>
               <div className="flex w-full h-[30%] justify-around rounded-b-2xl">
-                <div className="h-full w-[49%] bg-slate-400 rounded-bl-2xl ">
+                <button className="h-full w-[49%] bg-slate-400 rounded-bl-2xl ">
                   Ask
-                </div>
-                <div className="rounded-br-2xl h-full w-[49%] bg-slate-400">
+                </button>
+                <button className="rounded-br-2xl h-full w-[49%] bg-slate-400">
                   Next
-                </div>
+                </button>
               </div>
             </div>
 
             {/* OUR_CAMERA */}
+            <div className="absolute w-96 h-56 bottom-10 right-10 bg-slate-500 rounded-lg">
+              {" "}
+              Camera
+            </div>
           </div>
         </div>
       </div>
+
       <div
         id="exits-options"
-        className="w-full h-full backdrop-blur-lg absolute top-0 bg-[rgba(23, 23, 23, 0.44)] "
+        className="w-full h-full backdrop-blur-lg absolute top-0 bg-[rgba(23, 23, 23, 0.44)] flex items-center justify-center"
       >
         <button
           onClick={toggleExitOption}
@@ -68,7 +77,26 @@ const InterviewMEET = () => {
         >
           <img src="" alt="Exit" />
         </button>
-        <div className=""></div>
+        {/* //todo exit confirmation */}
+        <div className="w-[300px] h-28 flex flex-col items-center ">
+          <div className="w-[299px] h-[70%] bg-red-400 rounded-t-2xl p-2 text-center ">
+            Do you want to quit the interview
+          </div>
+          <div className="flex w-full h-[30%] justify-around rounded-b-2xl">
+            <button
+              className="h-full w-[149px] bg-slate-400 rounded-bl-2xl "
+              onClick={toggleExitOption}
+            >
+              No
+            </button>
+            <button
+              className="rounded-br-2xl h-full w-[149px] bg-slate-400"
+              onClick={backToHome}
+            >
+              <Link to="/">Yes</Link>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
