@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Interview = () => {
+  const [postID, setPostID] = useState("General");
+  const [typeID, setTypeID] = useState("Behavioural");
+
   return (
     <>
       <div className="w-full h-full bg-slate-900 py-28 m-0">
         <div className="h-screen flex flex-col items-center justify-around ">
           <div className="w-1/2 h-10  bg-slate-200 flex justify-around">
-            <select name="POST" id="POST">
+            <select name="POST" id="POST" onChange={(e)=>{
+              setPostID(e.target.value)
+            }}>
               <option value="SDE">SDE</option>
               <option value="CEO">CEO</option>
               <option value="CTO">CTO</option>
@@ -14,7 +20,9 @@ const Interview = () => {
               <option value="CFO">PM</option>
             </select>
 
-            <select name="Type" id="Type">
+            <select name="Type" id="Type" onChange={(e)=>{
+              setTypeID(e.target.value)
+            }}>
               <option value="Technical">Technical</option>
               <option value="Behaviour">Behaviour</option>
             </select>
@@ -39,7 +47,7 @@ const Interview = () => {
             </div>
           </div>
           <div className="w-12 bg-red-500 h-8 text-white">
-            <Link to="Details/SDE/Technical/Interviewer/Rohan"> Start</Link>
+            <Link to={"Details/" + postID + "/" + typeID + "/Interviewer/Rohan"}> Start</Link>
           </div>
         </div>
       </div>

@@ -110,7 +110,7 @@ const InterviewMEET = (props) => {
       }
       speak(questions[++idx]);
       setQid(qid => qid+1);
-    }, 180 * 1000);
+    }, 300 * 1000); // time for question + answer
   }
 
   return (
