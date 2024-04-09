@@ -53,10 +53,8 @@ def get_response(uploaded_file, jd):
     response = get_gemini_response(input_prompt.format(text=text, jd=jd))
 
     match = re.search(r'{.*}', response)
-    if match:
-        json_data =match.group()
-        return json_data
-    else:
-        return None
+    json_data =match.group()
+    return json_data
+
 
 
