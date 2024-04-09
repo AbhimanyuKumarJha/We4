@@ -6,7 +6,8 @@ import Interview from "./components/Interview/Interview";
 import Resume from "./components/Resume/Resume";
 import Dashboard from "./components/Dashboard/Dashboard";
 import CompleteReview from "./components/Interview/CompleteInterview";
-import InterviewMEET from "./components/Interview/meet";
+import InterviewMEET from "./components/Interview/AImeet";
+import ResumeScore from "./components/Resume/ResumeScore";
 
 function App() {
   return (
@@ -21,6 +22,11 @@ function App() {
             extact
             path="/Interview/Details/:postID/:typeID/Interviewer/:InterviewID"
             element={<InterviewMEET />}
+          />
+          <Route
+            exact
+            path="/Resume/ResumeScore/:ResumeSubmissionID"
+            element={<ResumeScore />}
           />
           <Route
             exact
