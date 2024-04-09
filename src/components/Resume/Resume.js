@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Resume = () => {
+  const [RoleName, setRoleName] = useState("");
   let randomNo = Math.random() / 1000000;
   return (
     <>
@@ -11,6 +12,9 @@ const Resume = () => {
           <select
             name="role"
             id="role"
+            onChange={(e) => {
+              setRoleName(e.target.value);
+            }}
             className="w-1/4 h-[10%] text-3xl rounded-xl"
           >
             <option value="" className=" text-slate-500 hover:bg-white ">
@@ -26,10 +30,10 @@ const Resume = () => {
         <div className="h-screen w-full flex flex-col items-center justify-center">
           <div className="w-2/5 h-1/2">
             <p className="text-2xl text-slate-300">Enter your JD</p>
-            <input
+            <textarea
               type="text"
               placeholder="Describe about your the role"
-              className=" w-full h-2/5 text-start"
+              className=" w-full h-2/5 rounded text-start resize"
             />
           </div>
           <button className=" bg-amber-800 border-1 rounded-sm p-2">
