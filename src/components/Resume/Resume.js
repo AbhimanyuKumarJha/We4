@@ -6,6 +6,7 @@ import axios from "axios";
 const Resume = () => {
   const [RoleName, setRoleName] = useState("");
   const [form, setForm] = useState({});
+  const [result, setResult] = useState({});
 
   const submitForm = () => {
     const formData = new FormData();
@@ -19,7 +20,8 @@ const Resume = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.percentagematch);
+        setResult({...result, ...res.data});
       });
   };
 
@@ -67,7 +69,10 @@ const Resume = () => {
 
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
             <Link
-              to={"ResumeScore/"}
+              to={{
+                pathname: "/ResumeScore",
+                query: { result },
+              }}
               onClick={() => {
                 console.log(form);
                 submitForm();
