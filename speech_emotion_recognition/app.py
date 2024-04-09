@@ -8,7 +8,7 @@ def extract_mfcc(filename):
     return mfcc
 
 # Path to your audio file
-file_path = r"D:\Pre_placement_solution\speech_emotion_recognition\dataset\YAF_disgust\YAF_bath_disgust.wav"
+file_path = r"C:\Users\Ayush\My projects\We4\speech_emotion_recognition\dataset\YAF_fear\YAF_back_fear.wav"
 
 # Extract MFCC features from the audio file
 mfcc_features = extract_mfcc(file_path)
