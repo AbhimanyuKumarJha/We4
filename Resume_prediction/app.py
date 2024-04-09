@@ -42,11 +42,14 @@ def get_response(uploaded_file, jd):
 
     I want output in JSON format for example:
 
+    {{
     Percentage Match: ["Percentage of resume match with JD"],
     MissingKeywords: ["Missing keywords from the resume that are required in JD"],
     Profile Summary: ["Your feedback on the resume of what it lacks"]
+    }}
 
     """
+
     response = get_gemini_response(input_prompt.format(text=text, jd=jd))
     print(response)
     match = re.search(r'{.*}', response)
