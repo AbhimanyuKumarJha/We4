@@ -51,7 +51,7 @@ def get_response(uploaded_file, jd):
 
     match = re.search(r'{.*}', response)
     if match:
-        json_data = json.loads(match.group())
+        json_data =match.group()
         return json_data
     else:
         return None
