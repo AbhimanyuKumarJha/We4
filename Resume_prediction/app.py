@@ -6,6 +6,7 @@ import json
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+import re
 
 load_dotenv()  # load all our environment variables
 
@@ -27,30 +28,32 @@ def input_pdf_text(uploaded_file):
     return text
 
 
-# Prompt Template
-input_prompt = """
-Hey Act Like a skilled or very experienced ATS (Application Tracking System)
-with a deep understanding of the tech field, software engineering, data science, data analyst
-and big data engineer. Your task is to evaluate the resume based on the given job description.
-You must consider the job market is very competitive and you should provide 
-the best assistance for improving the resumes. Assign the percentage Matching based 
-on JD and the missing keywords with high accuracy
-resume:{text}
-description:{jd}
+def get_response(uploaded_file, jd):
+    text = input_pdf_text(uploaded_file)
+    input_prompt = """
+    Hey Act Like a skilled or very experienced ATS (Application Tracking System)
+    with a deep understanding of the tech field, software engineering, data science, data analyst
+    and big data engineer. Your task is to evaluate the resume based on the given job description.
+    You must consider the job market is very competitive and you should provide 
+    the best assistance for improving the resumes. Assign the percentage Matching based 
+    on JD and the missing keywords with high accuracy
+    resume:{text}
+    description:{jd}
 
-I want output in JSON format for example:
+    I want output in JSON format for example:
 
-Percentage Match: ["Percentage of resume match with JD"],
-MissingKeywords: ["Missing keywords from the resume that are required in JD"],
-Profile Summary: ["Your feedback on the resume of what it lacks"]
+    Percentage Match: ["Percentage of resume match with JD"],
+    MissingKeywords: ["Missing keywords from the resume that are required in JD"],
+    Profile Summary: ["Your feedback on the resume of what it lacks"]
 
-"""
-#function with input uploaded file(resume in pdf) and jd(in text)
-def get_response(uploaded_file,jd):
-    #print(uploaded_file)
-    text=input_pdf_text(uploaded_file)
-    print(text)
+    """
     response = get_gemini_response(input_prompt.format(text=text, jd=jd))
     print(response)
-    #json_data = json.loads(response)
-    return response
+    match = re.search(r'{.*}', response)
+    if match:
+        json_data = json.loads(match.group())
+        return json_data
+    else:
+        return None
+
+
