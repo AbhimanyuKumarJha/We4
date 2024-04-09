@@ -1,9 +1,28 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Resume = () => {
   const [RoleName, setRoleName] = useState("");
   let randomNo = Math.random() / 1000000;
+  const [form, setForm] = useState({});
+
+  const submitForm = () => {
+    const formData = new FormData();
+    formData.append("pdf_file", form.pdf_data);
+    formData.append("text_data", form.message);
+
+    axios
+      .post("http://localhost:5000/predict", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  };
+
   return (
     <>
       <div className=" bg-slate-800">
@@ -16,6 +35,7 @@ const Resume = () => {
               setRoleName(e.target.value);
             }}
             className="w-1/4 h-[10%] text-3xl rounded-xl"
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
           >
             <option value="" className=" text-slate-500 hover:bg-white ">
               Role
@@ -33,7 +53,8 @@ const Resume = () => {
             <textarea
               type="text"
               placeholder="Describe about your the role"
-              className=" w-full h-2/5 rounded text-start resize"
+              className=" w-full h-2/5 text-start"
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
             />
           </div>
           <button className=" bg-amber-800 border-1 rounded-sm p-2">
@@ -42,10 +63,21 @@ const Resume = () => {
         </div>
         <div className="h-screen w-full flex flex-col items-center justify-center relative">
           <p className="text-2xl text-slate-300">Upload your Resume</p>
-          <input type="file" />
+          <input
+            type="file"
+            onChange={(e) => setForm({ ...form, pdf_data: e.target.files[0] })}
+          />
 
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
-            <Link to={"ResumeScore/" + randomNo}>SUBMIT</Link>
+            <Link
+              to={"ResumeScore/" + randomNo}
+              onClick={() => {
+                console.log(form);
+                submitForm();
+              }}
+            >
+              SUBMIT
+            </Link>
           </button>
         </div>
       </div>
