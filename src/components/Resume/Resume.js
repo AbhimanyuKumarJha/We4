@@ -4,7 +4,7 @@ import axios from "axios";
 
 const Resume = () => {
   const [form, setForm] = useState({});
-  const [result, setResult] = useState();
+  const [result, setResult] = useState({});
 
   const submitForm = () => {
     const formData = new FormData();
@@ -17,7 +17,7 @@ const Resume = () => {
       }
     }).then((res) => {
       console.log(res.data);
-      setResult(res.data);
+      setResult({...result, ...res.data});
     });
   }
 
@@ -62,13 +62,13 @@ const Resume = () => {
 
 
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
-            <Link href={{
-              to : "ResumeScore",
-              query: {result}
-            }} onClick={()=>{
-              console.log(form)
-              submitForm()
-            }}>SUBMIT</Link>
+          <Link to={{
+            pathname: "/ResumeScore",
+            query: { result }
+          }} onClick={() => {
+            console.log(form); // Ensure 'form' is defined and has expected value
+            submitForm(); // Ensure 'submitForm' is defined and working correctly
+          }}>SUBMIT</Link>
           </button>
         </div>
       </div>

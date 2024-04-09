@@ -49,7 +49,8 @@ Profile Summary: ["Your feedback on the resume of what it lacks"]
 def get_response(uploaded_file,jd):
     #print(uploaded_file)
     text=input_pdf_text(uploaded_file)
-    #print(text)
+    print(text)
     response = get_gemini_response(input_prompt.format(text=text, jd=jd))
-    json_data = json.loads(response)
-    return json_data
+    print(response)
+    #json_data = json.loads(response)
+    return response

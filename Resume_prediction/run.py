@@ -32,9 +32,9 @@ def predict():
     print(pdf_file.filename, text_data)
     # Call a function and pass text and PDF data as parameters
     result = get_response(pdf_file, text_data)
-
+    print(result)
     # Return the result
-    return result
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
