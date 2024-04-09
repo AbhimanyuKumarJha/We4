@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Resume = () => {
-  let randomNo = Math.random() / 1000000;
   const [form, setForm] = useState({});
-
+  const [result, setResult] = useState();
 
   const submitForm = () => {
     const formData = new FormData();
@@ -17,7 +16,8 @@ const Resume = () => {
           'Content-Type': 'multipart/form-data'
       }
     }).then((res) => {
-      console.log(res);
+      console.log(res.data);
+      setResult(res.data);
     });
   }
 
@@ -62,7 +62,10 @@ const Resume = () => {
 
 
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
-            <Link to={"ResumeScore/" + randomNo} onClick={()=>{
+            <Link href={{
+              to : "ResumeScore",
+              query: {result}
+            }} onClick={()=>{
               console.log(form)
               submitForm()
             }}>SUBMIT</Link>
