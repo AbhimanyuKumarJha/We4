@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import CompleteReview from "./components/Interview/CompleteInterview";
 import InterviewMEET from "./components/Interview/AImeet";
 import ResumeScore from "./components/Resume/ResumeScore";
+import Interviewer from "./components/Interview/Interviewer";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             element={<CompleteReview />}
           />
           <Route exact path="/Dashboard" element={<Dashboard />} />
+          <Route exact path="/Interviewer" element={<Interviewer/>}/>
         </Routes>
       </BrowserRouter>
     </>
