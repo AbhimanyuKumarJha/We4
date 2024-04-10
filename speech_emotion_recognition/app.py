@@ -1,36 +1,64 @@
+from flask import Flask, jsonify
+from queue import Queue
+from threading import Thread
 import tensorflow as tf
 import librosa
 import numpy as np
 
-def extract_mfcc(filename):
-    y, sr = librosa.load(filename, duration=3, offset=0.5)
+app = Flask(__name__)
+recording_queue = Queue()
+
+class_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'pleasant', 'sad']
+
+def extract_mfcc(audio_data):
+    y, sr = librosa.load(audio_data, sr=None)
     mfcc = np.mean(librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40).T, axis=0)
     return mfcc
 
-# Path to your audio file
-file_path = r"C:\Users\Ayush\My projects\We4\speech_emotion_recognition\dataset\YAF_fear\YAF_back_fear.wav"
+# Placeholder function for model prediction
+def predict_emotion(audio_data):
+    mfcc_features = extract_mfcc(audio_data)
+    mfcc_features = mfcc_features.reshape(1, -1)
+    prediction = model.predict(mfcc_features)
+    predicted_class_index = np.argmax(prediction)
+    predicted_class_label = class_labels[predicted_class_index]
+    return predicted_class_label
 
-# Extract MFCC features from the audio file
-mfcc_features = extract_mfcc(file_path)
+def fetch_audio_and_process():
+    while True:
+        if not recording_queue.empty():
+            audio_data = recording_queue.get()  # Get audio data from the recording queue
+            predicted_class = predict_emotion(audio_data)
+            print("Predicted emotion:", predicted_class)
 
-# Reshape the features to match the input shape expected by the model
-mfcc_features = mfcc_features.reshape(1, -1)
+def fetch_audio_from_api():
+    while True:
+        # Replace this with your actual API call to fetch audio data
+        audio_data = "placeholder_audio.wav"
+        recording_queue.put(audio_data)  # Put audio data into the recording queue
 
-# Load the pre-trained model
-model = tf.keras.models.load_model("your_model_name.h5")
+@app.route('/start', methods=['POST'])
+def start_processing():
+    # Start fetching audio from API in one thread
+    fetch_thread = Thread(target=fetch_audio_from_api)
+    fetch_thread.start()
 
-# Make prediction using the loaded model
-prediction = model.predict(mfcc_features)
+    # Start processing audio data in another thread
+    process_thread = Thread(target=fetch_audio_and_process)
+    process_thread.start()
 
-# Assuming you have class labels and their corresponding indices
-class_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'pleasant', 'sad']
+    return jsonify({'message': 'Processing started'})
 
-# Get the index of the class with the highest probability
-predicted_class_index = np.argmax(prediction)
+@app.route('/stop', methods=['POST'])
+def stop_processing():
+    # Stop fetching audio from API and wait for the remaining audio in the queue to be processed
+    while not recording_queue.empty():
+        audio_data = recording_queue.get()
+        predicted_class = predict_emotion(audio_data)
+        print("Predicted emotion for remaining audio:", predicted_class)
+    return jsonify({'message': 'Processing stopped'})
 
-# Get the predicted class label
-predicted_class_label = class_labels[predicted_class_index]
-
-# Print the predicted class label
-print("Predicted class:", predicted_class_label)
-
+if __name__ == '__main__':
+    # Load the pre-trained model
+    model = tf.keras.models.load_model("your_model_name.h5")
+    app.run(debug=True)
