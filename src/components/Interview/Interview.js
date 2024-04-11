@@ -89,14 +89,14 @@ const Interview = () => {
           </div>
           <div className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
             <Link
+              // to={"Details/" + postID + "/" + typeID + "/ManualInterviewer/Hardik"}
+              // to={"Mylobby"}
               to={
                 "Details/" +
                 postID +
                 "/" +
                 typeID +
-                "/" +
-                selectedItem +
-                "/Rohan"
+                "/ManualInterviewer/mylobby"
               }
             >
               {" "}
