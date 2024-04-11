@@ -56,7 +56,9 @@ const Interview = () => {
           </div>
           <div className="w-12 bg-red-500 h-8 text-white">
             <Link
-              to={"Details/" + postID + "/" + typeID + "/Interviewer/Rohan"}
+              // to={"Details/" + postID + "/" + typeID + "/ManualInterviewer/Hardik"}
+              // to={"Mylobby"}
+              to={"Details/" + postID + "/" + typeID + "/ManualInterviewer/mylobby"}
             >
               {" "}
               Start
