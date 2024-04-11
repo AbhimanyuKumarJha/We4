@@ -21,21 +21,17 @@ function App() {
           <Route exact path="/Interview" element={<Interview />} />
           <Route
             extact
-            path="/Interview/Details/:postID/:typeID/Interviewer/:InterviewID"
+            path="/Interview/Details/:postID/:typeID/:selectedItem/:InterviewID"
             element={<InterviewMEET />}
           />
-          <Route
-            exact
-            path="/Resume/ResumeScore/:ResumeSubmissionID"
-            element={<ResumeScore />}
-          />
+          <Route exact path="/Resume/ResumeScore" element={<ResumeScore />} />
           <Route
             exact
             path="/Complete-Interview"
             element={<CompleteReview />}
           />
           <Route exact path="/Dashboard" element={<Dashboard />} />
-          <Route exact path="/Interviewer" element={<Interviewer/>}/>
+          <Route exact path="/Interviewer" element={<Interviewer />} />
         </Routes>
       </BrowserRouter>
     </>

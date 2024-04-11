@@ -21,20 +21,25 @@ const Resume = () => {
       })
       .then((res) => {
         console.log(res.data.percentagematch);
-        setResult({...result, ...res.data});
+        setResult({ ...result, ...res.data });
       });
   };
-
+  const GotoDesc = () => {
+    return <a href="#Job-describtion" />;
+  };
   return (
     <>
-      <div className=" bg-slate-800">
+      <div className=" bg-[#222]">
         <div className="h-screen w-full flex flex-col items-center justify-center">
           <p className="text-2xl text-slate-300"> Choose the role</p>
           <select
             name="role"
             id="role"
             className="w-1/4 h-[10%] text-3xl rounded-xl"
-            onChange={(e) => setForm({ ...form, role: e.target.value })}
+            onChange={(e) => {
+              setForm({ ...form, role: e.target.value });
+              GotoDesc();
+            }}
           >
             <option value="" className=" text-slate-500 hover:bg-white ">
               Role
@@ -46,7 +51,10 @@ const Resume = () => {
             <option value="Y">Y</option>
           </select>
         </div>
-        <div className="h-screen w-full flex flex-col items-center justify-center">
+        <div
+          className="h-screen w-full flex flex-col items-center justify-center"
+          id="Job-describtion"
+        >
           <div className="w-2/5 h-1/2">
             <p className="text-2xl text-slate-300">Enter your JD</p>
             <textarea
@@ -57,10 +65,13 @@ const Resume = () => {
             />
           </div>
           <button className=" bg-amber-800 border-1 rounded-sm p-2">
-            NEXT
+            <a href="#Upload-Resume"> NEXT</a>
           </button>
         </div>
-        <div className="h-screen w-full flex flex-col items-center justify-center relative">
+        <div
+          className="h-screen w-full flex flex-col items-center justify-center relative"
+          id="Upload-Resume"
+        >
           <p className="text-2xl text-slate-300">Upload your Resume</p>
           <input
             type="file"
@@ -70,7 +81,7 @@ const Resume = () => {
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
             <Link
               to={{
-                pathname: "/ResumeScore",
+                pathname: "ResumeScore",
                 query: { result },
               }}
               onClick={() => {
