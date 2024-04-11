@@ -76,8 +76,10 @@ const Interview = () => {
             <div className=" w-1/4 h-[10%] rounded-sm bg-zinc-700" id="copy-link">{"http://localhost:3000/Interviewer/"}</div>
           <div className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
             <Link
-              to={"Details/" + postID + "/" + typeID + "/"+selectedItem+"/Rohan"}
-              >
+              // to={"Details/" + postID + "/" + typeID + "/ManualInterviewer/Hardik"}
+              // to={"Mylobby"}
+              to={"Details/" + postID + "/" + typeID + "/ManualInterviewer/mylobby"}
+            >
               {" "}
               Start
             </Link>
