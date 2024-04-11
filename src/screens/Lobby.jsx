@@ -12,7 +12,7 @@ const LobbyScreen = () => {
   const handleSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
-      console.log("this is the my fuck" , email,room,type);
+      console.log("fuck you " , email,room,type);
       socket.emit("room:join", { email, room,type });
     },
     [email, room, socket,type]
