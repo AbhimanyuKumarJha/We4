@@ -5,7 +5,7 @@ const Interview = () => {
   const [postID, setPostID] = useState("General");
   const [typeID, setTypeID] = useState("Behavioural");
 
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState('Bot1');
   
     const handleItemClick = (item) => {
       setSelectedItem(item);

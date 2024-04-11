@@ -21,7 +21,7 @@ function App() {
           <Route exact path="/Interview" element={<Interview />} />
           <Route
             extact
-            path="/Interview/Details/:postID/:typeID/Interviewer/:InterviewID"
+            path="/Interview/Details/:postID/:typeID/:Interviewer/:InterviewID"
             element={<InterviewMEET />}
           />
           <Route

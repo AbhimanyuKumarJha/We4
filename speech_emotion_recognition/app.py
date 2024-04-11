@@ -1,12 +1,14 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify,request
 from queue import Queue
 from threading import Thread
 import tensorflow as tf
 import librosa
 import numpy as np
+from flask_cors import CORS
 
 app = Flask(__name__)
 recording_queue = Queue()
+CORS(app)
 
 class_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'pleasant', 'sad']
 
@@ -37,9 +39,12 @@ def fetch_audio_from_api():
         audio_data = "placeholder_audio.wav"
         recording_queue.put(audio_data)  # Put audio data into the recording queue
 
-@app.route('/start', methods=['POST'])
+@app.post('/start')
 def start_processing():
     # Start fetching audio from API in one thread
+    audio_file = request.files['blob']
+    audio_file.save('audio.wav')  # Specify the path where you want to save the file
+    
     fetch_thread = Thread(target=fetch_audio_from_api)
     fetch_thread.start()
 
@@ -48,6 +53,7 @@ def start_processing():
     process_thread.start()
 
     return jsonify({'message': 'Processing started'})
+
 
 @app.route('/stop', methods=['POST'])
 def stop_processing():
