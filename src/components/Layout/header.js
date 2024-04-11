@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 import Dashboard from "../Dashboard/Dashboard";
 
 const Header = () => {
   const [loginVisible, setLoginVisible] = useState(false);
+  const { access_token, username } = useParams();
 
-  const toggleLoginVisibility = () => {
-    setLoginVisible(!loginVisible);
+  console.log(access_token, username)
+  const callHiveSigner = async() => {
+    await axios.get("https://490bj8xz-3001.inc1.devtunnels.ms/login").then((res) => {
+      console.log(res.data);
+      window.location.href = res.data;
+    });
   };
 
   return (
@@ -29,7 +35,7 @@ const Header = () => {
           <div>
             <Link to="/Complete-Interview">Preplacement </Link>
           </div>
-          <button onClick={toggleLoginVisibility}>
+          <button onClick={callHiveSigner}>
             {/* <Link to="/Dashboard">Login </Link> */}
             Login
           </button>

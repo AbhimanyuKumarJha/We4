@@ -8,18 +8,14 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.post('/')
-def get_data():
-    from flask import Flask, request
-
-app = Flask(__name__)
 idx= 0  # Initialize the index variable to 0
 
 @app.route('/', methods=['POST'])
 def receive_blob():
     global idx  # Access the global index variable
-    if 'mergedBlob' in request.files:
-        merged_blob = request.files['mergedBlob']
+    print(request)
+    if 'blob' in request.files:
+        merged_blob = request.files['blob']
         # Save the received Blob data to a file with the incremented index
         with open(f'received_recording{idx}.webm', 'wb') as f:
             f.write(merged_blob.read())
