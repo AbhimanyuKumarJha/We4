@@ -52,6 +52,7 @@ function App() {
             element={<CompleteReview />}
           />
           <Route exact path="/Dashboard" element={<Dashboard />} />
+          <Route exact path="/Interviewer" element={<Interviewer/>}/>
         </Routes>
       </BrowserRouter>
     </>

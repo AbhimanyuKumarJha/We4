@@ -5,8 +5,8 @@ import axios from "axios";
 
 const Resume = () => {
   const [RoleName, setRoleName] = useState("");
-  let randomNo = Math.random() / 1000000;
   const [form, setForm] = useState({});
+  const [result, setResult] = useState({});
 
   const submitForm = () => {
     const formData = new FormData();
@@ -20,7 +20,8 @@ const Resume = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.percentagematch);
+        setResult({...result, ...res.data});
       });
   };
 
@@ -32,9 +33,6 @@ const Resume = () => {
           <select
             name="role"
             id="role"
-            onChange={(e) => {
-              setRoleName(e.target.value);
-            }}
             className="w-1/4 h-[10%] text-3xl rounded-xl"
             onChange={(e) => setForm({ ...form, role: e.target.value })}
           >
@@ -71,7 +69,10 @@ const Resume = () => {
 
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
             <Link
-              to={"ResumeScore/" + randomNo}
+              to={{
+                pathname: "/ResumeScore",
+                query: { result },
+              }}
               onClick={() => {
                 console.log(form);
                 submitForm();
