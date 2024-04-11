@@ -35,26 +35,24 @@ def get_response(uploaded_file, jd):
     with a deep understanding of the tech field, software engineering, data science, data analyst
     and big data engineer. Your task is to evaluate the resume based on the given job description.
     You must consider the job market is very competitive and you should provide 
-    the best assistance for improving the resumes. Assign the percentage Matching based 
-    on JD and the missing keywords with high accuracy
-    resume:{text}
-    description:{jd}
-
-    I want output in JSON format for example:
-
-    {{
-    Percentage Match: ["Percentage of resume match with JD"],
-    MissingKeywords: ["Missing keywords from the resume that are required in JD"],
-    Profile Summary: ["Your feedback on the resume of what it lacks"]
-    }}
+    the best assistance for improving the resumes.
+    give me only result in format like in format like percentagematch:70%; missingkeyword: ; wordlength:;. 
 
     """
-
+    
     response = get_gemini_response(input_prompt.format(text=text, jd=jd))
+    print(response)
+    key_value_pattern = r'(\w+)\s*:\s*([^;]+);'
 
-    match = re.search(r'{.*}', response)
-    json_data =match.group()
-    return json_data
+    # Find all key-value pairs using regex
+    matches = re.findall(key_value_pattern, response)
 
+    # Format key-value pairs into JSON
+    result = {}
+    for key, value in matches:
+        result[key.strip()] = value.strip()
 
+    print(result)
+    
+    return result
 
