@@ -14,7 +14,7 @@ const Interviewer = (props) => {
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
-  const { postID, typeID, InterviewID } = useParams();
+  const { postID, typeID, InterviewID, roomID } = useParams();
   const [qid, setQid] = useState(0);
   const [questions, setQuestions] = useState([]);
 
@@ -22,7 +22,9 @@ const Interviewer = (props) => {
     console.log(`Email ${email} joined room`);
     setRemoteSocketId(id);
   }, []);
-
+  useEffect(()=>{
+    socket.emit("room:join", { email:InterviewID, room:roomID,type:"interview"});
+  },[postID,typeID,InterviewID,roomID]);
   const handleCallUser = useCallback(async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
