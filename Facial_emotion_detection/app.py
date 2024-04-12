@@ -27,42 +27,36 @@ def process_live_video():
         if not ret:
             print("Error: Failed to capture frame.")
             break
-        
         # Process the frame
         confidence = process_frame(frame)
         print("Face confidence for this frame:", confidence)
         
-        frame_count += 1  # Increment frame count
-        if frame_count == 100:  # Check if 30 frames have been processed
-            break  # Reset frame count
-            # Perform desired action after processing every 30 frames
-        
-        if cv2.waitKey(20) == ord('q'):
-            break
-
-    # Release the camera and close OpenCV windows
     cap.release()
     cv2.destroyAllWindows()
 
-# Function to start the video processing
+
 def start_video_processing():
     global processing_flag
     processing_flag = 1
     process_live_video()
 
 
-# Function to stop the video processing
+
 def stop_video_processing():
-    global processing_flag  # Declare processing_flag as global
-    processing_flag = 0  # Set flag to stop the processing loop
+    global processing_flag 
+    processing_flag = 0  
     print("Video processing stopped.")
+    time.sleep(10)
+    processing_flag=1
 
-# Example of starting and stopping video processing at API calls
-start_thread = threading.Thread(target=start_video_processing)
-start_thread.start()
+def start_api():
+    start_thread = threading.Thread(target=start_video_processing)
+    start_thread.start()
 
-# Sleep for some time to allow processing to run
-time.sleep(20)
+def stop_api():
+    stop_thread = threading.Thread(target=stop_video_processing)
+    stop_thread.start()
 
-stop_thread = threading.Thread(target=stop_video_processing)
-stop_thread.start()
+start_api()         ##Gupta tere kaam ke functions
+time.sleep(10)
+stop_api()      ##stop karne ke liye
