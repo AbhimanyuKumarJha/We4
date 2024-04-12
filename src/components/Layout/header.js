@@ -12,10 +12,12 @@ const Header = () => {
   return (
     <>
       <div
-        className="w-full h-25 bg-black top-0 flex p-5 justify-between items-center text-center fixed z-9"
+        className="w-full h-20 bg-black top-0 flex p-5 justify-between items-center text-center fixed z-9"
         id="layout-header"
       >
-        <div className="w-10 h-10 text-white">LOGO</div>
+        <div>
+          <img src="/Logo.png" alt="Logo" width="180px" />
+        </div>
         <div className="w-fit h-full flex text-white gap-6 px-3">
           <div>
             <Link to="/">HOME </Link>
