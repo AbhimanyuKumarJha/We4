@@ -12,13 +12,14 @@ import ManualInterviewMEET from "./components/Interview/ManualMeet";
 import { SocketProvider } from "./context/SocketProvider";
 import LobbyScreen from "./screens/Lobby";
 import Interviewer from "./components/Interview/Interviewer";
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/callback" element={<Home />} />
           <Route exact path="/Resume" element={<Resume />} />
           <Route exact path="/Interview" element={<Interview />} />
           <Route
@@ -28,17 +29,22 @@ function App() {
           />
           <Route
             extact
-            path="/Interview/Details/:postID/:typeID/ManualInterviewer/mylobby"
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/mylobby/online"
             element={<LobbyScreen />}
           />
           <Route
             extact
-            path="/Interview/Details/:postID/:typeID/ManualInterviewer/:InterviewID/candidate/room/:roomId"
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/mylobby/bot"
+            element={<InterviewMEET />}
+          />
+          <Route
+            extact
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/:InterviewID/online/candidate/room/:roomID"
             element={<ManualInterviewMEET />}
           />
           <Route
             extact
-            path="/Interview/Details/:postID/:typeID/ManualInterviewer/:InterviewID/interviewer/room/:roomId"
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/:InterviewID/online/interviewer/room/:roomID"
             element={<Interviewer />}
           />
           <Route

@@ -76,4 +76,3 @@ def stop_analysis():                ###function for stop
 start_analysis() 
 time.sleep(100)
 stop_analysis()
-

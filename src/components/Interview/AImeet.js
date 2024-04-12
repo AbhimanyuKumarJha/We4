@@ -1,12 +1,63 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useReactMediaRecorder, ReactMediaRecorder } from "react-media-recorder";
 import fetch from "../../helper/question";
 
 const InterviewMEET = (props) => {
   const { postID, typeID, InterviewID } = useParams();
   const [qid, setQid] = useState(0);
   const [questions, setQuestions] = useState([]);
+  const [recordedChunks, setRecordedChunks] = useState([]);
+  const [time, setTime] = useState(10);
+  let timingInterval, qInterval;
+
+  const handleDataAvailable = useCallback((chunk) => {
+    setRecordedChunks((prevChunks) => [...prevChunks, chunk]);
+  }, [recordedChunks]);
+  
+  // let {
+  //   liveStream,
+  //   stopRecording,
+  //   startRecording,
+  // } = useMediaRecorder({
+  //  // recordScreen: true,
+  //   blobOptions: { type: 'audio/webm' },
+  //   mediaStreamConstraints: { audio: false, video: true },
+  //   onStop: (blob) => {console.log(blob);},
+  //   onDataAvailable: (data) => {
+  //     console.log(data)
+  //     handleDataAvailable(data);
+  //   },
+  // });
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+  useReactMediaRecorder({ video: true });
+
+  async function callTheapi(recordedChunks) {
+    const formData = new FormData();
+    formData.append('mergedBlob', recordedChunks, 'recording.webm');
+  
+    try {
+      const response = await axios.post('http://localhost:5000/', formData,  {headers: {
+        "Content-Type": "multipart/form-data",
+      },});
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  function download(){
+  //     const downloadLink = document.createElement('a');
+  // downloadLink.href = URL.createObjectURL(mediaBlob);
+  //     downloadLink.download = 'recording.webm'; // Specify the filename
+  //     downloadLink.click();
+    const mergedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+    callTheapi(mergedBlob);
+  }
+
+
   // const {
   //   transcript,
   //   listening,
@@ -31,9 +82,12 @@ const InterviewMEET = (props) => {
   // }
 
   const speak = (text) => {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    synth.speak(utterance);
+    return new Promise((resolve) => {
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.onend = () => resolve(true);
+      synth.speak(utterance);
+    });
   };
 
   useEffect(() => {
@@ -53,31 +107,6 @@ const InterviewMEET = (props) => {
   }
   }, [questions]); // Run effect when questions state changes
 
-  // useEffect(() => {
-  //   let interval;
-  //   if (listening) {
-  //     interval = setInterval(() => {
-  //       setTimer(prevTimer => prevTimer - 1);
-  //     }, 1000); // Update timer every second
-  //   }
-
-  //   if (timer === 0) {
-  //     stopListening();
-  //   }
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, [listening, timer]);
-
-
-  const start = Date.now();
-
-  const calculateTimeLeft = () => {
-    let difference = Date.now() - start;
-    return props.QuestionTimer - difference / 1000;
-  };
-  const [sec, setSec] = useState();
 
   //todo Remove the header from the meet
   const RemoveHeader = document.getElementById("layout-header");
@@ -103,15 +132,51 @@ const InterviewMEET = (props) => {
 
   const startInterview = () => {
     let idx = 0;
-    speak(questions[idx]);
-    setInterval(() => {
-      if(idx == questions.length - 1) {
-        clearInterval();
+    speak(questions[0]).then((completed) => {
+      if (completed) {
+        console.log("Speech has finished.");
+        startRecording();
+        console.log("Recording stopped", mediaBlobUrl);
+        timingInterval = setInterval(() => {
+          setTime((prevTime) => {
+            if (prevTime === 0) {
+              clearInterval(timingInterval);
+              return 10;
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
       }
-      speak(questions[++idx]);
+    });
+
+    
+
+    qInterval = setInterval(() => {
+      if(idx == (questions.length - 1)) {
+        clearInterval(qInterval);
+      }
+      stopRecording();
+      console.log("Recording stopped", mediaBlobUrl);
+      speak(questions[++idx]).then((completed) => {
+        if (completed) {
+          console.log("Speech has finished.");
+          startRecording();
+          timingInterval = setInterval(() => {
+            setTime((prevTime) => {
+              if (prevTime === 0) {
+                clearInterval(timingInterval);
+                return 10;
+              }
+              return prevTime - 1;
+            });
+          }, 1000);
+        }
+      });
+
       setQid(qid => qid+1);
-    }, 300 * 1000); // time for question + answer
+    }, 20 * 1000); // time for question + answer
   }
+  
 
   return (
     <>
@@ -139,7 +204,7 @@ const InterviewMEET = (props) => {
             {/* time and command component */}
             <div className="w-60 h-40 bg-slate-600 rounded-2xl">
               <div className="w-full h-[70%] bg-red-400 rounded-t-2xl  ">
-                {props.QuestionTimer}
+                {time}
               </div>
               <div className="flex w-full h-[30%] justify-around rounded-b-2xl">
                 <button className="h-full w-[49%] bg-slate-400 rounded-bl-2xl ">
@@ -153,8 +218,7 @@ const InterviewMEET = (props) => {
 
             {/* OUR_CAMERA */}
             <div className="absolute w-96 h-56 bottom-10 right-10 bg-slate-500 rounded-lg">
-              {" "}
-              Camera
+            
             </div>
           </div>
         </div>
