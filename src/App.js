@@ -8,8 +8,10 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import CompleteReview from "./components/Interview/CompleteInterview";
 import InterviewMEET from "./components/Interview/AImeet";
 import ResumeScore from "./components/Resume/ResumeScore";
+import ManualInterviewMEET from "./components/Interview/ManualMeet";
+import { SocketProvider } from "./context/SocketProvider";
+import LobbyScreen from "./screens/Lobby";
 import Interviewer from "./components/Interview/Interviewer";
-
 function App() {
   return (
     <>
@@ -21,8 +23,23 @@ function App() {
           <Route exact path="/Interview" element={<Interview />} />
           <Route
             extact
-            path="/Interview/Details/:postID/:typeID/Interviewer/:InterviewID"
+            path="/Interview/Details/:postID/:typeID/:selectedItem/:InterviewID"
             element={<InterviewMEET />}
+          />
+          <Route
+            extact
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/mylobby"
+            element={<LobbyScreen />}
+          />
+          <Route
+            extact
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/:InterviewID/candidate/room/:roomId"
+            element={<ManualInterviewMEET />}
+          />
+          <Route
+            extact
+            path="/Interview/Details/:postID/:typeID/ManualInterviewer/:InterviewID/interviewer/room/:roomId"
+            element={<Interviewer />}
           />
           <Route
             exact
@@ -35,7 +52,7 @@ function App() {
             element={<CompleteReview />}
           />
           <Route exact path="/Dashboard" element={<Dashboard />} />
-          <Route exact path="/Interviewer" element={<Interviewer/>}/>
+          <Route exact path="/Interviewer" element={<Interviewer />} />
         </Routes>
       </BrowserRouter>
     </>
