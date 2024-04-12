@@ -18,10 +18,10 @@ const Interview = () => {
   };
   return (
     <>
-      <div className="w-full h-full bg-slate-900  m-0">
+      <div className="w-full h-full bg-gray-950  m-0 overfolw-scroll snap-x">
         {/* <div className="h-screen flex flex-col items-center justify-around "> */}
         {/* <div className="w-full h-[200vh]  bg-slate-200 flex flex-col justify-around"> */}
-        <div className="h-screen w-full flex flex-col items-center justify-center">
+        <div className="h-screen w-full flex flex-col items-center justify-center snap-center">
           <p className="text-2xl text-slate-300"> Choose the POST</p>
           <select
             name="POST"
@@ -38,7 +38,7 @@ const Interview = () => {
             <option value="CFO">PM</option>
           </select>
         </div>
-        <div className="h-screen w-full flex flex-col items-center justify-center">
+        <div className="h-screen w-full flex flex-col items-center justify-center snap-center">
           <p className="text-2xl text-slate-300"> Choose the POST</p>
           <select
             name="Type"
@@ -55,7 +55,7 @@ const Interview = () => {
 
         {/* //! Type of AI and connect any other */}
 
-        <div className="h-screen w-full flex flex-col items-center justify-center relative">
+        <div className="h-screen w-full flex flex-col items-center justify-center relative snap-center">
           <div className="flex w-1/2 h-1/2 justify-around">
             <div
               onClick={() => handleItemClick("bot1")}

@@ -29,7 +29,7 @@ const Resume = () => {
   };
   return (
     <>
-      <div className=" bg-[#222]">
+      <div className=" bg-gray-950">
         <div className="h-screen w-full flex flex-col items-center justify-center">
           <p className="text-2xl text-slate-300"> Choose the role</p>
           <select
