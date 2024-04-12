@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, redirect, Router } from "react-router-dom";
 import axios from "axios";
+import { useScore } from "../../context/ScoreProvider";
 
 const Resume = () => {
   const [RoleName, setRoleName] = useState("");
+  const [score, setScore] = useScore();
   const [form, setForm] = useState({});
-  const [result, setResult] = useState({});
 
   const submitForm = () => {
     const formData = new FormData();
@@ -20,8 +21,11 @@ const Resume = () => {
         },
       })
       .then((res) => {
-        console.log(res.data.percentagematch);
-        setResult({ ...result, ...res.data });
+        console.log(res.data);
+        setScore((prev)=>({
+          ...prev,
+          ...res.data
+        }));
       });
   };
   const GotoDesc = () => {
@@ -80,11 +84,15 @@ const Resume = () => {
 
           <button className="absolute bottom-[5%] left-1/2 bg-amber-800 border-1 rounded-sm p-2">
             <Link
-              to={{
-                pathname: "ResumeScore",
-                query: { result },
-              }}
-              onClick={() => {
+            //  to={"ResumeScore?match=" + result.percentagematch + "&role=" + form.role + "&key=" + result.missingkeyword + "&words" + result.wordlength}
+            //  to={{
+            //     pathname: "/ResumeScore",
+            //     state: { keywords: result.missingkeyword}
+            //   }} 
+            // to={`ResumeScore?keywords=${encodeURIComponent(result.missingkeyword)}&role=${form.role}&match=${result.percentagematch}&words=${result.wordlength}`}
+            to={"ResumeScore/2"}
+              
+            onClick={() => {
                 console.log(form);
                 submitForm();
               }}

@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { SocketProvider } from "./context/SocketProvider";
+import { ScoreProvider } from "./context/ScoreProvider";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
+  <ScoreProvider>
   <SocketProvider>
     <App />
   </SocketProvider>
+  </ScoreProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -19,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/callback" element={<Home />} />
           <Route exact path="/Resume" element={<Resume />} />
           <Route exact path="/Interview" element={<Interview />} />
           <Route

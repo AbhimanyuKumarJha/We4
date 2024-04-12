@@ -4,6 +4,7 @@ import { useState } from "react";
 const Interview = () => {
   const [postID, setPostID] = useState("General");
   const [typeID, setTypeID] = useState("Behavioural");
+
   const [roomId,setRoomId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -19,6 +20,7 @@ const Interview = () => {
        setRoomId(getRandomNumber(1, 100));
     }
   };
+
   return (
     <>
       <div className="w-full h-full bg-gray-950  m-0 overfolw-scroll snap-x">
@@ -56,7 +58,8 @@ const Interview = () => {
           </select>
         </div>
 
-        {/* //! Type of AI and connect any other */}
+          {/* //! Type of AI and connect any other */}
+          
 
         <div className="h-screen w-full flex flex-col items-center justify-center relative snap-center">
           <div className="flex w-1/2 h-1/2 justify-around">

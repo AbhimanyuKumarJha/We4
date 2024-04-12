@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import DownArrow from "../../helper/svg";
+import { useLocation } from 'react-router-dom';
+import { useScore } from "../../context/ScoreProvider";
+
 const ResumeScore = () => {
+  // const location = useLocation();
+  // const { keywords } = location.state;
+  // console.log(keywords);
+  const [score, setScore] = useScore();
+  console.log(score)
   const [scoreParts, setScoreParts] = useState(null);
   return (
     <>
@@ -13,7 +21,7 @@ const ResumeScore = () => {
             }}
             className="h-1/4"
           >
-            profile
+           
           </button>
           <button
             onClick={() => {
@@ -21,7 +29,7 @@ const ResumeScore = () => {
             }}
             className="h-1/4"
           >
-            missing keywords
+            {score.missingkeyword}
           </button>
           <button
             onClick={() => {
@@ -32,13 +40,10 @@ const ResumeScore = () => {
             skills
           </button>
         </div>
-        <div className=" relative w-[50vh] h-[50vh] bg-orange-600 rounded-full p-auto transition delay-300 translate-x-[-100%]">
-          <p className="text-center mt-[10%]">Your Score</p>
-          <p className=" text-center text-8xl mt-[26%]">00%</p>
-        </div>
-        <div className=" absolute top-[30%] right-[10%] h-1/2 w-1/3  bg-slate-600">
-          {" "}
-          Code here
+
+        <div className=" relative w-[50vh] h-[50vh] bg-orange-600 rounded-full flex flex-col items-center p-auto transition delay-300 translate-x-[-100%]">
+          <p className="mt-[10%]">Your Score</p>
+          <p className=" text-8xl mt-[26%]">{score.percentagematch || ""}</p>
         </div>
         <DownArrow Class="animate-bounce w-8 h-8 absolute left-[49.5%] bottom-3" />
       </div>
