@@ -1,70 +1,78 @@
-from flask import Flask, jsonify,request
-from queue import Queue
-from threading import Thread
 import tensorflow as tf
 import librosa
 import numpy as np
-from flask_cors import CORS
+import sounddevice as sd
+import queue
+import threading
+import time
 
-app = Flask(__name__)
-recording_queue = Queue()
-CORS(app)
+# Load the pre-trained model
+model = tf.keras.models.load_model("your_model_name.h5")
 
+# Assuming you have class labels and their corresponding indices
 class_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'pleasant', 'sad']
 
-def extract_mfcc(audio_data):
-    y, sr = librosa.load(audio_data, sr=None)
-    mfcc = np.mean(librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40).T, axis=0)
+# Global variables to control the analysis
+analysis_running = False
+
+# Queue for communication between threads
+audio_queue = queue.Queue()
+
+def extract_mfcc(audio_data, sr):
+    mfcc = np.mean(librosa.feature.mfcc(y=audio_data, sr=sr, n_mfcc=40).T, axis=0)
     return mfcc
 
-# Placeholder function for model prediction
-def predict_emotion(audio_data):
-    mfcc_features = extract_mfcc(audio_data)
-    mfcc_features = mfcc_features.reshape(1, -1)
-    prediction = model.predict(mfcc_features)
-    predicted_class_index = np.argmax(prediction)
-    predicted_class_label = class_labels[predicted_class_index]
-    return predicted_class_label
+# Define a function to process audio from the microphone and make predictions
+def predict_emotion():
+    global analysis_running
+    duration = 3  # Duration of recording in seconds
+    sr = 22050  # Sample rate
+    while analysis_running:
+        try:
+            print("Recording...")
+            # Record audio from the microphone
+            audio_data = sd.rec(int(duration * sr), samplerate=sr, channels=1, dtype='float32')
+            sd.wait()  # Wait until recording is finished
+            # Put the recorded audio data into the queue
+            audio_queue.put(audio_data[:, 0])
+        except KeyboardInterrupt:
+            print("\nAnalysis stopped.")
+            break
 
-def fetch_audio_and_process():
-    while True:
-        if not recording_queue.empty():
-            audio_data = recording_queue.get()  # Get audio data from the recording queue
-            predicted_class = predict_emotion(audio_data)
-            print("Predicted emotion:", predicted_class)
+def analyze_audio():
+    global analysis_running
+    while analysis_running:
+        try:
+            audio_data = audio_queue.get()
+            mfcc_features = extract_mfcc(audio_data, sr=22050)  # Assuming sample rate is 22050
+            mfcc_features = mfcc_features.reshape(1, -1)
+            prediction = model.predict(mfcc_features)
+            # Get the index of the class with the highest probability
+            predicted_class_index = np.argmax(prediction)
+            # Get the predicted class label
+            predicted_class_label = class_labels[predicted_class_index]
+            # Print the predicted class label
+            print("Predicted emotion:", predicted_class_label)
+        except queue.Empty:
+            pass
 
-def fetch_audio_from_api():
-    while True:
-        # Replace this with your actual API call to fetch audio data
-        audio_data = "placeholder_audio.wav"
-        recording_queue.put(audio_data)  # Put audio data into the recording queue
+def start_analysis():           ##Gupta tere kaam ke function for start
+    global analysis_running
+    if not analysis_running:
+        analysis_running = True
+        threading.Thread(target=predict_emotion).start()
+        threading.Thread(target=analyze_audio).start()
+    else:
+        print("Analysis is already running.")
 
-@app.post('/start')
-def start_processing():
-    # Start fetching audio from API in one thread
-    audio_file = request.files['blob']
-    audio_file.save('audio.wav')  # Specify the path where you want to save the file
-    
-    fetch_thread = Thread(target=fetch_audio_from_api)
-    fetch_thread.start()
+def stop_analysis():                ###function for stop
+    global analysis_running
+    if analysis_running:
+        analysis_running = False
+    else:
+        print("Analysis is not running.")
 
-    # Start processing audio data in another thread
-    process_thread = Thread(target=fetch_audio_and_process)
-    process_thread.start()
-
-    return jsonify({'message': 'Processing started'})
-
-
-@app.route('/stop', methods=['POST'])
-def stop_processing():
-    # Stop fetching audio from API and wait for the remaining audio in the queue to be processed
-    while not recording_queue.empty():
-        audio_data = recording_queue.get()
-        predicted_class = predict_emotion(audio_data)
-        print("Predicted emotion for remaining audio:", predicted_class)
-    return jsonify({'message': 'Processing stopped'})
-
-if __name__ == '__main__':
-    # Load the pre-trained model
-    model = tf.keras.models.load_model("your_model_name.h5")
-    app.run(debug=True)
+# Example usage:
+start_analysis() 
+time.sleep(100)
+stop_analysis()

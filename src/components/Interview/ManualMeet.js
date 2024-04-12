@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState,useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import fetch from "../../helper/question";
 import ReactPlayer from "react-player";
 import peer from "../../service/peer";
@@ -15,7 +17,7 @@ const ManualInterviewMEET = (props) => {
   const { postID, typeID, InterviewID } = useParams();
   const [qid, setQid] = useState(0);
   const [questions, setQuestions] = useState([]);
-  
+
   // const {
   //   transcript,
   //   listening,
@@ -48,7 +50,7 @@ const ManualInterviewMEET = (props) => {
       audio: true,
       video: true,
     });
-    console.log(stream.getVideoTracks());
+    console.log(stream);
     const offer = await peer.getOffer();
     socket.emit("user:call", { to: remoteSocketId, offer });
     setMyStream(stream);
@@ -146,24 +148,20 @@ const ManualInterviewMEET = (props) => {
   };
 
   useEffect(() => {
-  const getQ = async () => {
-    try {
-      const ques = await fetch(postID); 
-    
-      setQuestions(ques);
-    } catch (error) {
-      console.error('Error fetching questions:', error);
+    const getQ = async () => {
+      try {
+        const ques = await fetch(postID);
+
+        setQuestions(ques);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    if (questions.length === 0) {
+      getQ();
     }
-  };
-
-  
-  if (questions.length === 0) {
-    getQ();
-  }
   }, [questions]); // Run effect when questions state changes
-
-  
-
 
   const start = Date.now();
 
@@ -199,57 +197,81 @@ const ManualInterviewMEET = (props) => {
     let idx = 0;
     speak(questions[idx]);
     setInterval(() => {
-      if(idx == questions.length - 1) {
+      if (idx == questions.length - 1) {
         clearInterval();
       }
       speak(questions[++idx]);
-      setQid(qid => qid+1);
+      setQid((qid) => qid + 1);
     }, 300 * 1000); // time for question + answer
-  }
+  };
 
   return (
     <>
       <div className="w-full h-1/10">
         <div className="text-white text-lg absolute top-3 left-3 z-10">
-          <button
-              onClick={toggleExitOption}
-              ><img src="" alt="Exit" />
+          <button onClick={toggleExitOption}>
+            <img src="" alt="Exit" />
           </button>
-        
-          {myStream && <button onClick={sendStreams} className="text-white">Send Stream</button>}
-        </div>     
+
+          {/* //! isko dekhna h */}
+          {myStream && (
+            <button onClick={sendStreams} className="text-white">
+              Send Stream
+            </button>
+          )}
+        </div>
       </div>
       <div className="w-full h-screen bg-slate-950 m-0 p-0 z-9 flex items-center">
-         <h4 className="text-white">{remoteSocketId ? "Connected" : "No one in room"}</h4>
-         {/* {remoteSocketId && <button onClick={handleCallUser} className="text-white">CALL</button>} */}
+        {remoteSocketId ? (
+          <p className="text-[rgb(0,255,0)] text-lg font-semibold absolute bottom-10 left-4">
+            Connected
+          </p>
+        ) : (
+          <p className="text-[rgb(255,0,0)] text-lg font-semibold absolute bottom-10 left-4">
+            No one in the room
+          </p>
+        )}
+
+        <img
+          src="/Logo.png"
+          alt="LOGO"
+          width="150px"
+          className="absolute top-[5%] right-20"
+        />
+        {/* {remoteSocketId && <button onClick={handleCallUser} className="text-white">CALL</button>} */}
         {/* Main meet */}
         <div className="main-meet flex w-11/12 h-4/5 m-auto items-center px-auto justify-around">
           {/* <div className="w-3/5 h-3/4 rounded-lg bg-slate-500"> */}
-          <div className="rounded-lg bg-slate-500 flex-col">
-              {remoteStream && (
-                <>
-                  <ReactPlayer
-                    playing
-                    muted
-                    height="100%"
-                    width="100%"
-                    // className="w-3/5 h-3/4 rounded-lg bg-slate-500"
-                    url={remoteStream}
-                  />
-                </>
-              )}
-              {/* <button onClick={startInterview} className="w-3/5 h-1/4 bg-slate-500">start</button>
+          <div className="w- h-1/2 min-w-[640px] min-h-[480px] rounded-lg bg-slate-500 hover:shadow-[55px_-43px_120px_rgba(112,0,255,0.25),-74px_39px_120px_rgba(204,0,255,0.25)]  border-white border-8">
+            {remoteStream && (
+              <>
+                <ReactPlayer
+                  playing
+                  muted
+                  height="100%"
+                  width="100%"
+                  // className="w-3/5 h-3/4 rounded-lg bg-slate-500"
+                  url={remoteStream}
+                />
+              </>
+            )}
+          </div>
+
+          {/* <button onClick={startInterview} className="w-3/5 h-1/4 bg-slate-500">start</button>
               <button onClick={() => speak(questions[qid])}>Saale</button>
               <div>{questions[qid]}</div> */}
           {/* </div> */}
-        </div>
-          <div id="RIGHT-SIDE-OPTIONS" className="h-full flex-col items-center justify-center border-white border-2">
-            {/* <div className="logo-meet absolute top-10 right-14 h-14 w-14 bg-slate-50">
+          {/* //! Commit kiya h abhi ke liye */}
+          {/* <div
+            id="RIGHT-SIDE-OPTIONS"
+            className="h-full flex-col items-center justify-center border-white border-2"
+          > */}
+          {/* <div className="logo-meet absolute top-10 right-14 h-14 w-14 bg-slate-50">
               <img src="" alt="LOGO" />{" "}
             </div> */}
 
-            {/* time and command component */}
-            <div className="w-60 h-1/4 bg-slate-600 rounded-2xl items-center">
+          {/* time and command component */}
+          {/* <div className="w-60 h-1/4 bg-slate-600 rounded-2xl items-center">
               <div className="w-full h-[70%] bg-red-400 rounded-t-2xl  ">
                 {props.QuestionTimer}
               </div>
@@ -261,23 +283,23 @@ const ManualInterviewMEET = (props) => {
                   Next
                 </button>
               </div>
-            </div>
+            </div> */}
 
-            {/* OUR_CAMERA */}
+          {/* //! OUR_CAMERA */}
+          <div className="w- h-1/2 min-w-[640px] min-h-[480px] rounded-lg bg-slate-500 hover:shadow-[55px_-43px_120px_rgba(112,0,255,0.25),-74px_39px_120px_rgba(204,0,255,0.25)] border-white border-8">
             {myStream && (
-              <div className="h-3/4 w-60 border-2 border-green-400">
-                <ReactPlayer
-                  playing
-                  muted
-                  height="100%"
-                  width="100%"
-                  url={myStream}
-                />
-              </div>
+              <ReactPlayer
+                playing
+                muted
+                height="100%"
+                width="100%"
+                url={myStream}
+              />
             )}
           </div>
         </div>
       </div>
+      {/* </div> */}
 
       <div
         id="exits-options"

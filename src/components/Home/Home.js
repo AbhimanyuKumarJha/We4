@@ -24,7 +24,7 @@ function Home() {
 
   return (
     <>
-      <div className="w-full h-full bg-gray-950 text-white p-0 mt-20">
+      <div className="w-full h-full bg-gray-950 text-white p-0 mt-20 overflow-scroll  fixed ">
         <div className="w-full h-[150vh] flex justify-center items-center relative">
           <p className="Hero-heading text-[7vw] text-white">Placement Assist</p>
           <div className="absolute top-[120vh] right-1/3 translate-x-1/2">
