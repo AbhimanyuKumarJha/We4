@@ -115,9 +115,15 @@ def get_response(uploaded_file, jd):
             Description = match.group(1)
         else:
             response_3 = None
-    mydict={"percentagematch":percentagematch,"missingkeyword":missingkeyword,"Description":Description}
-    output=json.dumps(mydict)
+    mydict={
+            "percentagematch":percentagematch,
+            "missingkeyword":missingkeyword,
+            "Description":Description
+            }
+    
+    output=jsonify(mydict)
     return output
+
 text = '''
 Minimum qualifications:
 
